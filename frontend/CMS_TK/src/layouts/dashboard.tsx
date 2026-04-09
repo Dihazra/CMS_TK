@@ -19,6 +19,32 @@ export default function DashboardLayout({
                 console.error("Gagal parsing data user", e);
             }
         }
+
+        // Auto logout if idle for 15 minutes
+        let timeoutTimer: ReturnType<typeof setTimeout>;
+        
+        const logout = () => {
+            localStorage.removeItem("cms_user");
+            localStorage.removeItem("cms_jwt_token");
+            localStorage.removeItem("cms_last_active");
+            window.location.href = "/login";
+        };
+
+        const resetTimer = () => {
+            localStorage.setItem("cms_last_active", Date.now().toString());
+            clearTimeout(timeoutTimer);
+            timeoutTimer = setTimeout(logout, 15 * 60 * 1000); // 15 menit
+        };
+
+        const events = ['mousemove', 'mousedown', 'keypress', 'touchmove', 'scroll'];
+        events.forEach(event => window.addEventListener(event, resetTimer));
+        
+        resetTimer(); // Initialize timer
+
+        return () => {
+            events.forEach(event => window.removeEventListener(event, resetTimer));
+            clearTimeout(timeoutTimer);
+        };
     }, []);
 
     return (

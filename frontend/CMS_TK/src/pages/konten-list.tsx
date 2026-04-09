@@ -9,8 +9,8 @@ import { Select, SelectItem } from "@heroui/select";
 import { Plus, FileText, Lock, CalendarDays, Send, Calendar } from "lucide-react";
 import { Avatar } from "@heroui/avatar";
 import { useState, useEffect } from "react";
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
+import SunEditor from "suneditor-react";
+import "suneditor/dist/css/suneditor.min.css";
 
 const API_BASE = "http://localhost:8080/v1";
 
@@ -96,17 +96,6 @@ export default function KontenListPage() {
     const [authorId, setAuthorId] = useState("");
     const [isLoading, setIsLoading] = useState(false);
 
-    const modules = {
-        toolbar: [
-            [{ header: [1, 2, 3, false] }],
-            ["bold", "italic", "underline", "strike"],
-            [{ list: "ordered" }, { list: "bullet" }],
-            [{ color: [] }, { background: [] }],
-            ["link", "image"],
-            ["clean"],
-        ],
-    };
-
     // ─── fetch contents ───────────────────────────────────────────────────────
     const fetchData = async () => {
         const user = getAuthUser();
@@ -119,16 +108,20 @@ export default function KontenListPage() {
     };
 
     // ─── fetch available plans (Kreator) ──────────────────────────────────────
-    const fetchAvailablePlans = async () => {
+    const fetchAvailablePlans = async (currentContentId?: string) => {
         const user = getAuthUser();
         try {
-            const res = await fetch(`${API_BASE}/plans/available`, {
-                headers: {
-                    "X-User-Role": user?.Role || user?.role || "",
-                    "X-User-ID": user?.ID || user?.id || "",
-                },
+            const res = await fetch(`${API_BASE}/plans`, {
+                headers: authHeaders(user),
             });
-            if (res.ok) setAvailablePlans((await res.json()) || []);
+            if (res.ok) {
+                const allPlans = (await res.json()) || [];
+                const available = allPlans.filter((p: any) => 
+                    (!p.content_id && p.status === "Planned") ||
+                    (currentContentId && p.content_id === currentContentId)
+                );
+                setAvailablePlans(available);
+            }
         } catch (err) {
             console.error("Failed to fetch available plans", err);
         }
@@ -138,6 +131,25 @@ export default function KontenListPage() {
         fetchData();
         if (!isManager) fetchAvailablePlans();
     }, [isManager]);
+
+    // Check URL params for auto-open (dari link di Dashboard Planner)
+    useEffect(() => {
+        if (contents.length > 0) {
+            const params = new URLSearchParams(window.location.search);
+            const cid = params.get("content_id");
+            if (cid) {
+                const item = contents.find(c => c.id === cid || c.ID === cid);
+                if (item) {
+                    handleOpenReview(item);
+                }
+                // Hapus query param setelah dibuka agar tidak berulang
+                const url = new URL(window.location.href);
+                url.searchParams.delete("content_id");
+                window.history.replaceState({}, "", url.toString());
+            }
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [contents]);
 
     // ─── modal: buat konten ───────────────────────────────────────────────────
     const handleOpenModal = () => {
@@ -211,8 +223,8 @@ export default function KontenListPage() {
     // ─── buka modal pilih plan sebelum submit ─────────────────────────────────
     const handleOpenSubmitModal = async (item: any) => {
         setSelectedContent(item);
-        setSelectedPlanDate("");
-        await fetchAvailablePlans();
+        setSelectedPlanDate(item.plan_date || "");
+        await fetchAvailablePlans(item.id || item.ID);
         onSubmitOpen();
     };
 
@@ -435,8 +447,25 @@ export default function KontenListPage() {
                                     </div>
                                     <div className="flex flex-col gap-2">
                                         <label className="text-sm font-medium text-foreground">Isi Konten</label>
-                                        <div className="border border-default-200 rounded-lg overflow-hidden bg-white [&_.ql-toolbar]:border-none [&_.ql-toolbar]:border-b [&_.ql-toolbar]:border-default-200 [&_.ql-container]:border-none [&_.ql-editor]:min-h-[250px] [&_.ql-editor]:text-base">
-                                            <ReactQuill theme="snow" value={editorContent} onChange={setEditorContent} modules={modules} placeholder="Tuliskan isi konten Anda di sini..." />
+                                        <div className="border border-default-200 rounded-lg overflow-hidden bg-white [&_.se-toolbar]:border-none [&_.se-toolbar]:border-b [&_.se-toolbar]:border-default-200 [&_.se-resizing-bar]:hidden">
+                                            <SunEditor
+                                                setContents={editorContent}
+                                                onChange={setEditorContent}
+                                                placeholder="Tuliskan isi konten Anda di sini..."
+                                                setOptions={{
+                                                    buttonList: [
+                                                        ['undo', 'redo'],
+                                                        ['formatBlock', 'font', 'fontSize'],
+                                                        ['bold', 'underline', 'italic', 'strike', 'subscript', 'superscript'],
+                                                        ['fontColor', 'hiliteColor'],
+                                                        ['align', 'list', 'lineHeight'],
+                                                        ['outdent', 'indent'],
+                                                        ['table', 'horizontalRule', 'link', 'image', 'video'],
+                                                        ['fullScreen', 'showBlocks', 'codeView']
+                                                    ],
+                                                    minHeight: '250px'
+                                                }}
+                                            />
                                         </div>
                                     </div>
                                 </ModalBody>
@@ -565,7 +594,7 @@ export default function KontenListPage() {
                                                                 </span>
                                                             )}
                                                         </div>
-                                                        <div className="text-sm prose prose-sm max-w-none prose-p:my-1 w-full overflow-x-auto" dangerouslySetInnerHTML={{ __html: selectedContent?.content || "" }} />
+                                                        <div className="sun-editor-editable text-sm w-full overflow-x-auto" style={{ padding: 0, backgroundColor: 'transparent', border: 'none' }} dangerouslySetInnerHTML={{ __html: selectedContent?.content || "" }} />
                                                     </CardBody>
                                                 </Card>
                                             </div>

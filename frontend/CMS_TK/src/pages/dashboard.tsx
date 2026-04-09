@@ -414,11 +414,21 @@ export default function DashboardPage() {
                                             {daysInWeek.map((day, i) => {
                                                 const chip = day.dataItem ? getPlanStatusChip(day.dataItem.status) : null;
                                                 return (
-                                                    <div key={i} className={`p-1.5 ${i !== 6 ? "border-r" : ""} border-default-200 flex items-center justify-center`}>
+                                                    <div key={i} className={`p-1.5 ${i !== 6 ? "border-r" : ""} border-default-200 flex flex-col items-center justify-center gap-1`}>
                                                         {chip ? (
-                                                            <Chip size="sm" variant="flat" color={chip.color} className="text-[9px] font-bold h-5 px-1.5">
-                                                                {chip.label}
-                                                            </Chip>
+                                                            <>
+                                                                <Chip size="sm" variant="flat" color={chip.color} className="text-[9px] font-bold h-5 px-1.5 min-h-[20px]">
+                                                                    {chip.label}
+                                                                </Chip>
+                                                                {isManager && day.dataItem?.content_id && (
+                                                                    <a 
+                                                                        href={`/konten-list?content_id=${day.dataItem.content_id}`} 
+                                                                        className="text-[9px] text-blue-600 hover:text-blue-800 hover:underline flex items-center gap-0.5 mt-0.5 transition-colors font-medium cursor-pointer"
+                                                                    >
+                                                                        <FileText className="w-2.5 h-2.5" /> Lihat Konten
+                                                                    </a>
+                                                                )}
+                                                            </>
                                                         ) : (
                                                             <span className="text-[10px] text-default-300">-</span>
                                                         )}
