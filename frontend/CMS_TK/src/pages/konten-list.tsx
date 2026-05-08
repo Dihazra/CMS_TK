@@ -12,7 +12,7 @@ import { useState, useEffect } from "react";
 import SunEditor from "suneditor-react";
 import "suneditor/dist/css/suneditor.min.css";
 
-const API_BASE = "http://localhost:8080/v1";
+const API_BASE = (import.meta.env.VITE_API_URL || "http://localhost:8080/v1");
 
 function getAuthUser() {
     const stored = localStorage.getItem("cms_user");

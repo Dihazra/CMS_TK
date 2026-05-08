@@ -3,7 +3,7 @@ import { Button } from "@heroui/button";
 import DashboardLayout from "@/layouts/dashboard";
 import {
     FileText, Clock, AlertCircle, TrendingUp, TrendingDown,
-    ChevronLeft, ChevronRight, Loader2, Lock, CalendarCheck
+    ChevronLeft, ChevronRight, Lock, CalendarCheck
 } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure } from "@heroui/modal";
@@ -11,7 +11,7 @@ import { Input } from "@heroui/input";
 import { Select, SelectItem } from "@heroui/select";
 import { Chip } from "@heroui/chip";
 
-const API_BASE = "http://localhost:8080/v1";
+const API_BASE = (import.meta.env.VITE_API_URL || "http://localhost:8080/v1");
 
 function getAuthUser() {
     const stored = localStorage.getItem("cms_user");
@@ -45,7 +45,7 @@ interface ContentOption {
 export default function DashboardPage() {
     const [stats, setStats] = useState({ total: 0, review: 0, revisi: 0 });
     const [plannerDict, setPlannerDict] = useState<Record<string, PlanData>>({});
-    const [plannerLoading, setPlannerLoading] = useState(true);
+    // Removed unused plannerLoading state
     const [saving, setSaving] = useState(false);
     const [availableContents, setAvailableContents] = useState<ContentOption[]>([]);
 
@@ -108,7 +108,6 @@ export default function DashboardPage() {
 
     // ─── fetch data ───────────────────────────────────────────────────────────
     const fetchPlans = useCallback(async () => {
-        setPlannerLoading(true);
         try {
             const res = await fetch(`${API_BASE}/plans`, {
                 headers: {
@@ -126,8 +125,6 @@ export default function DashboardPage() {
             }
         } catch (err) {
             console.error("Failed to fetch plans:", err);
-        } finally {
-            setPlannerLoading(false);
         }
     }, []);
 
