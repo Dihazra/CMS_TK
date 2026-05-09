@@ -5,6 +5,8 @@ import { Mail, Lock, ArrowRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 
+const API_BASE = (import.meta.env.VITE_API_URL || "http://localhost:8080/v1");
+
 export default function LoginPage() {
     const navigate = useNavigate();
     const [email, setEmail] = useState("");
@@ -44,7 +46,7 @@ export default function LoginPage() {
             const jwtToken = tokenData?.token || tokenData?.data?.token || tokenData?.access_token || "temp-token";
 
             // 2. Jika sukses login eksternal, validasi apakah user terdaftar (whitelisted) di backend lokal
-            const usersRes = await fetch("http://localhost:8080/v1/users");
+            const usersRes = await fetch(`${API_BASE}/users`);
             if (!usersRes.ok) throw new Error("Gagal mengambil data sistem.");
 
             const usersList = await usersRes.json();

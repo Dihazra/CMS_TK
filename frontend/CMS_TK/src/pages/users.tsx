@@ -9,6 +9,8 @@ import { Avatar } from "@heroui/avatar";
 import { Plus } from "lucide-react";
 import { useState, useEffect } from "react";
 
+const API_BASE = (import.meta.env.VITE_API_URL || "http://localhost:8080/v1");
+
 export default function UsersPage() {
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
@@ -20,7 +22,7 @@ export default function UsersPage() {
 
     const fetchUsers = async () => {
         try {
-            const res = await fetch("http://localhost:8080/v1/users");
+            const res = await fetch(`${API_BASE}/users`);
             const data = await res.json();
             if (res.ok) {
                 setUsers(data || []);
@@ -37,7 +39,7 @@ export default function UsersPage() {
         const authUser = localStorage.getItem("cms_user");
         const parsed = authUser ? JSON.parse(authUser) : null;
         try {
-            await fetch(`http://localhost:8080/v1/users/status?id=${userId}`, {
+            await fetch(`${API_BASE}/users/status?id=${userId}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
@@ -63,7 +65,7 @@ export default function UsersPage() {
         const authUser = localStorage.getItem("cms_user");
         const parsed = authUser ? JSON.parse(authUser) : null;
         try {
-            const res = await fetch("http://localhost:8080/v1/users", {
+            const res = await fetch(`${API_BASE}/users`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
