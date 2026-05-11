@@ -239,10 +239,10 @@ export default function DashboardPage() {
             <div className="flex flex-col gap-8 pb-10">
 
                 {/* Header */}
-                <div className="flex items-center justify-between pb-4 border-b border-default-200">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-4 border-b border-default-200 gap-4 sm:gap-0">
                     <div>
-                        <h1 className="text-3xl font-bold tracking-tight text-default-900">Overview</h1>
-                        <p className="text-default-500 mt-1">Pantau performa dan tugas kreatif tim Anda hari ini.</p>
+                        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-default-900">Overview</h1>
+                        <p className="text-default-500 mt-1 text-sm sm:text-base">Pantau performa dan tugas kreatif tim Anda hari ini.</p>
                     </div>
                 </div>
 
@@ -305,17 +305,17 @@ export default function DashboardPage() {
 
                 {/* Content Planner Calendar */}
                 <Card shadow="sm" radius="lg" className="border border-default-100 bg-white overflow-hidden">
-                    <div className="px-6 py-5 border-b border-default-100 flex items-center justify-between bg-white">
+                    <div className="px-6 py-5 border-b border-default-100 flex flex-col sm:flex-row items-start sm:items-center justify-between bg-white gap-4 sm:gap-0">
                         <div>
                             <h4 className="text-lg font-bold text-default-900">Jadwal Content Planner</h4>
                             <p className="text-sm font-medium text-default-500 mt-1">Periode: {getDisplayMonth()}</p>
                         </div>
-                        <div className="flex items-center gap-4">
-                            <div className="flex items-center gap-1 bg-default-100 p-1 rounded-lg border border-default-200">
+                        <div className="flex items-center gap-4 w-full sm:w-auto">
+                            <div className="flex items-center gap-1 bg-default-100 p-1 rounded-lg border border-default-200 w-full sm:w-auto justify-between sm:justify-start">
                                 <Button size="sm" isIconOnly variant="flat" onPress={() => setWeekOffset(w => w - 4)}>
                                     <ChevronLeft className="w-4 h-4 text-default-600" />
                                 </Button>
-                                <span className="text-xs font-semibold px-2 text-default-600">Geser Bulan</span>
+                                <span className="text-xs font-semibold px-4 sm:px-2 text-default-600">Geser Bulan</span>
                                 <Button size="sm" isIconOnly variant="flat" onPress={() => setWeekOffset(w => w + 4)}>
                                     <ChevronRight className="w-4 h-4 text-default-600" />
                                 </Button>

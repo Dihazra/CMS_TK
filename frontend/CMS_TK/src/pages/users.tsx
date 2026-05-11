@@ -19,13 +19,13 @@ export default function UsersPage() {
     const [email, setEmail] = useState("");
     const [role, setRole] = useState("");
     const [isLoading, setIsLoading] = useState(false);
-
     const { isOpen: isEditOpen, onOpen: onEditOpen, onOpenChange: onEditOpenChange } = useDisclosure();
     const [selectedUser, setSelectedUser] = useState<any>(null);
     const [editName, setEditName] = useState("");
     const [editEmail, setEditEmail] = useState("");
     const [editRole, setEditRole] = useState("");
     const [editStatus, setEditStatus] = useState("");
+
 
     const fetchUsers = async () => {
         try {
@@ -97,7 +97,7 @@ export default function UsersPage() {
         setIsLoading(false);
     };
 
-    const openEditModal = (user: any) => {
+        const openEditModal = (user: any) => {
         setSelectedUser(user);
         setEditName(user.name || user.Name);
         setEditEmail(user.email || user.Email);
@@ -159,22 +159,24 @@ export default function UsersPage() {
         }
     };
 
+
     return (
         <DashboardLayout>
             <div className="flex flex-col gap-6 pb-10">
-                <div className="flex justify-between items-end border-b border-default-200 pb-4 pt-2">
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end border-b border-default-200 pb-4 pt-2 gap-4 sm:gap-0">
                     <div>
-                        <h1 className="text-3xl font-bold text-default-900 tracking-tight">Manajemen User</h1>
-                        <p className="text-default-500 mt-1">Kelola akses dan peran anggota tim kreatif Anda.</p>
+                        <h1 className="text-2xl sm:text-3xl font-bold text-default-900 tracking-tight">Manajemen User</h1>
+                        <p className="text-default-500 mt-1 text-sm sm:text-base">Kelola akses dan peran anggota tim kreatif Anda.</p>
                     </div>
-                    <Button onPress={onOpen} color="primary" className="font-medium bg-blue-600 shadow-lg shadow-blue-500/30 font-semibold" startContent={<Plus className="w-4 h-4" />}>
+                    <Button onPress={onOpen} color="primary" className="font-medium bg-blue-600 shadow-lg shadow-blue-500/30 font-semibold w-full sm:w-auto" startContent={<Plus className="w-4 h-4" />}>
                         Tambah User
                     </Button>
                 </div>
 
                 <Card shadow="sm" radius="lg" className="border border-default-100 bg-white group">
                     <CardBody className="p-0">
-                        <Table aria-label="Daftar User" shadow="none" removeWrapper className="w-full">
+                        <div className="overflow-x-auto w-full">
+                            <Table aria-label="Daftar User" shadow="none" removeWrapper className="w-full min-w-[600px]">
                             <TableHeader>
                                 <TableColumn className="bg-default-50/80 text-default-500 font-semibold uppercase text-[10px] tracking-wider py-4">Pengguna</TableColumn>
                                 <TableColumn className="bg-default-50/80 text-default-500 font-semibold uppercase text-[10px] tracking-wider py-4">Peran</TableColumn>
@@ -211,7 +213,8 @@ export default function UsersPage() {
                                     </TableRow>
                                 ))}
                             </TableBody>
-                        </Table>
+                            </Table>
+                        </div>
                     </CardBody>
                 </Card>
 
@@ -268,7 +271,7 @@ export default function UsersPage() {
                         )}
                     </ModalContent>
                 </Modal>
-
+                
                 {/* Modal Edit User */}
                 <Modal isOpen={isEditOpen} onOpenChange={onEditOpenChange} size="md">
                     <ModalContent>

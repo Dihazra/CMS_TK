@@ -24,7 +24,7 @@ export default function LoginPage() {
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!email || !password) return;
-        
+
         setIsLoading(true);
         setErrorMsg("");
 
@@ -51,7 +51,7 @@ export default function LoginPage() {
 
             const usersList = await usersRes.json();
             const inputEmail = email.trim().toLowerCase();
-            const localUser = usersList?.find((u: any) => 
+            const localUser = usersList?.find((u: any) =>
                 (u.email || u.Email || "").trim().toLowerCase() === inputEmail
             );
 
@@ -65,7 +65,7 @@ export default function LoginPage() {
             localStorage.setItem("cms_user", JSON.stringify(localUser));
 
             // Pastikan halaman berpindah dengan me-refresh paksa ke root
-            window.location.href = "/"; 
+            window.location.href = "/";
         } catch (error: any) {
             setErrorMsg(error.message || "Terjadi kesalahan saat login.");
         } finally {
@@ -78,10 +78,10 @@ export default function LoginPage() {
             {/* Background Decorations */}
             <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-blue-500/20 blur-[120px] rounded-full pointer-events-none" />
             <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-purple-500/20 blur-[120px] rounded-full pointer-events-none" />
-            
+
             <div className="w-full max-w-md px-4 relative z-10">
                 <div className="text-center mb-8 animate-fade-in-up">
-                    
+
                     <h1 className="text-4xl font-extrabold text-default-900 tracking-tight mb-2">CMS Tim Kreatif</h1>
                     <p className="text-default-500 font-medium">Masuk untuk mengelola agenda konten Anda.</p>
                 </div>
@@ -114,7 +114,7 @@ export default function LoginPage() {
                                     inputWrapper: "bg-white/50 border-default-200 hover:border-blue-500 transition-colors"
                                 }}
                             />
-                            
+
                             <div>
                                 <Input
                                     label="Kata Sandi / SSO"
@@ -133,10 +133,10 @@ export default function LoginPage() {
                                 />
                             </div>
 
-                            <Button 
-                                type="submit" 
-                                color="primary" 
-                                size="lg" 
+                            <Button
+                                type="submit"
+                                color="primary"
+                                size="lg"
                                 radius="lg"
                                 isLoading={isLoading}
                                 endContent={!isLoading && <ArrowRight className="w-4 h-4 ml-1" />}

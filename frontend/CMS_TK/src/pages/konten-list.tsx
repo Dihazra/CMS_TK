@@ -325,16 +325,16 @@ export default function KontenListPage() {
         <DashboardLayout>
             <div className="flex flex-col gap-6 pb-10">
                 {/* Header */}
-                <div className="flex justify-between items-end border-b border-default-200 pb-4 pt-2">
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end border-b border-default-200 pb-4 pt-2 gap-4 sm:gap-0">
                     <div>
-                        <h1 className="text-3xl font-bold text-default-900 tracking-tight">Daftar Konten</h1>
-                        <p className="text-default-500 mt-1">Kelola dan pantau seluruh konten materi Anda dengan mudah.</p>
+                        <h1 className="text-2xl sm:text-3xl font-bold text-default-900 tracking-tight">Daftar Konten</h1>
+                        <p className="text-default-500 mt-1 text-sm sm:text-base">Kelola dan pantau seluruh konten materi Anda dengan mudah.</p>
                     </div>
                     {!isManager && (
                         <Button
                             onPress={handleOpenModal}
                             color="primary"
-                            className="font-medium bg-blue-600 shadow-lg shadow-blue-500/30 font-semibold"
+                            className="font-medium bg-blue-600 shadow-lg shadow-blue-500/30 font-semibold w-full sm:w-auto"
                             startContent={<Plus className="w-4 h-4" />}
                         >
                             Buat Konten Baru
@@ -343,10 +343,10 @@ export default function KontenListPage() {
                 </div>
 
                 {/* ── Tools & Search ────────────────────────────────────────────────── */}
-                <div className="flex justify-between items-center bg-white p-4 rounded-xl shadow-sm border border-default-100">
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-white p-4 rounded-xl shadow-sm border border-default-100 gap-4 sm:gap-0">
                     <Input
                         classNames={{
-                            base: "max-w-xs",
+                            base: "w-full sm:max-w-xs",
                             inputWrapper: "bg-default-100/50 hover:bg-default-100",
                         }}
                         placeholder="Cari judul, pilar atau kreator..."
@@ -362,8 +362,9 @@ export default function KontenListPage() {
                 {/* Tabel */}
                 <Card shadow="sm" radius="lg" className="border border-default-100 bg-white">
                     <CardBody className="p-0">
-                        <Table aria-label="Daftar Konten" shadow="none" removeWrapper className="w-full">
-                            <TableHeader>
+                        <div className="overflow-x-auto w-full">
+                            <Table aria-label="Daftar Konten" shadow="none" removeWrapper className="w-full min-w-[800px]">
+                                <TableHeader>
                                 <TableColumn className="bg-default-50/80 text-default-500 font-semibold uppercase text-[10px] tracking-wider py-4">Judul Konten</TableColumn>
                                 <TableColumn className="bg-default-50/80 text-default-500 font-semibold uppercase text-[10px] tracking-wider py-4">Penyusun</TableColumn>
                                 <TableColumn className="bg-default-50/80 text-default-500 font-semibold uppercase text-[10px] tracking-wider py-4">Jadwal</TableColumn>
@@ -454,12 +455,13 @@ export default function KontenListPage() {
                                     );
                                 })}
                             </TableBody>
-                        </Table>
+                            </Table>
+                        </div>
                     </CardBody>
                     
                     {/* Pagination */}
                     {totalPages > 1 && (
-                        <div className="flex justify-between items-center p-4 border-t border-default-100 bg-default-50/50">
+                        <div className="flex flex-col sm:flex-row justify-between items-center p-4 border-t border-default-100 bg-default-50/50 gap-4 sm:gap-0">
                             <span className="text-sm text-default-500 font-medium">
                                 Halaman {currentPage} dari {totalPages}
                             </span>
@@ -495,8 +497,8 @@ export default function KontenListPage() {
                                     <p className="text-sm text-default-500 font-normal">Buat atau edit draf konten materi Anda di sini.</p>
                                 </ModalHeader>
                                 <ModalBody className="py-6 px-6 gap-6">
-                                    <div className="grid grid-cols-2 gap-4">
-                                        <div className="col-span-2">
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                        <div className="col-span-1 sm:col-span-2">
                                             <Input label="Judul Konten" labelPlacement="outside" placeholder="Masukkan judul konten..." variant="bordered" value={title} onChange={(e) => setTitle(e.target.value)} />
                                         </div>
                                         <div className="col-span-1">
@@ -641,13 +643,13 @@ export default function KontenListPage() {
                                             {isManager ? "Tinjau, berikan revisi, atau setujui konten." : "Lihat isi konten Anda beserta feedback dari Manajer."}
                                         </p>
                                     </ModalHeader>
-                                    <ModalBody className="py-6 px-6 gap-6 bg-default-50/50">
-                                        <div className="grid grid-cols-3 gap-6">
-                                            <div className={(isManager || selectedContent?.feedback) ? "col-span-2 flex flex-col gap-4" : "col-span-3 flex flex-col gap-4"}>
+                                    <ModalBody className="py-6 px-4 md:px-6 gap-6 bg-default-50/50">
+                                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                                            <div className={(isManager || selectedContent?.feedback) ? "col-span-1 lg:col-span-2 flex flex-col gap-4" : "col-span-1 lg:col-span-3 flex flex-col gap-4"}>
                                                 <Card shadow="sm" className="border border-default-200">
                                                     <CardBody>
                                                         <h3 className="text-xl font-bold text-default-900 mb-2">{selectedContent?.title}</h3>
-                                                        <div className="flex gap-4 text-sm text-default-500 mb-6 border-b border-default-100 pb-4">
+                                                        <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 text-sm text-default-500 mb-6 border-b border-default-100 pb-4">
                                                             <span><strong>Oleh:</strong> {selectedContent?.author_name}</span>
                                                             <span><strong>Pilar:</strong> {selectedContent?.category}</span>
                                                             {selectedContent?.plan_date && (
