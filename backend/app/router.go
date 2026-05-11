@@ -46,6 +46,8 @@ func NewRouter(dbURL string) http.Handler {
 	// ─── User Routes (Manajer only for write) ────────────────────────────────
 	v1Router.Get("/users", apiCfg.handlerGetUsers)
 	v1Router.Post("/users", apiCfg.handlerCreateUser)
+	v1Router.Put("/users", apiCfg.handlerUpdateUser)
+	v1Router.Delete("/users", apiCfg.handlerDeleteUser)
 	v1Router.Put("/users/status", apiCfg.handlerUpdateUserStatus)
 
 	// ─── Content Routes ───────────────────────────────────────────────────────

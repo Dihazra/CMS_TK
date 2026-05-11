@@ -6,7 +6,7 @@ import { Input } from "@heroui/input";
 import { Select, SelectItem } from "@heroui/select";
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure } from "@heroui/modal";
 import { Avatar } from "@heroui/avatar";
-import { Plus } from "lucide-react";
+import { Plus, Pencil, Trash2 } from "lucide-react";
 import { useState, useEffect } from "react";
 
 const API_BASE = (import.meta.env.VITE_API_URL || "http://localhost:8080/v1");
@@ -19,6 +19,13 @@ export default function UsersPage() {
     const [email, setEmail] = useState("");
     const [role, setRole] = useState("");
     const [isLoading, setIsLoading] = useState(false);
+
+    const { isOpen: isEditOpen, onOpen: onEditOpen, onOpenChange: onEditOpenChange } = useDisclosure();
+    const [selectedUser, setSelectedUser] = useState<any>(null);
+    const [editName, setEditName] = useState("");
+    const [editEmail, setEditEmail] = useState("");
+    const [editRole, setEditRole] = useState("");
+    const [editStatus, setEditStatus] = useState("");
 
     const fetchUsers = async () => {
         try {
@@ -90,6 +97,68 @@ export default function UsersPage() {
         setIsLoading(false);
     };
 
+    const openEditModal = (user: any) => {
+        setSelectedUser(user);
+        setEditName(user.name || user.Name);
+        setEditEmail(user.email || user.Email);
+        setEditRole(user.role || user.Role);
+        setEditStatus(user.status || user.Status);
+        onEditOpen();
+    };
+
+    const handleEditUser = async () => {
+        if (!selectedUser || !editName || !editEmail || !editRole || !editStatus) return;
+        setIsLoading(true);
+        const authUser = localStorage.getItem("cms_user");
+        const parsed = authUser ? JSON.parse(authUser) : null;
+        try {
+            const userId = selectedUser.id || selectedUser.ID;
+            const res = await fetch(`${API_BASE}/users?id=${userId}`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-User-Role": parsed?.Role || parsed?.role || "",
+                    "X-User-ID": parsed?.ID || parsed?.id || "",
+                },
+                body: JSON.stringify({ name: editName, email: editEmail, role: editRole, status: editStatus }),
+            });
+            if (res.ok) {
+                fetchUsers();
+                onEditOpenChange();
+            } else {
+                const err = await res.json();
+                alert(err.error || "Gagal mengedit user");
+            }
+        } catch (error) {
+            console.error("Failed to edit user", error);
+        }
+        setIsLoading(false);
+    };
+
+    const handleDeleteUser = async (user: any) => {
+        if (!confirm(`Apakah Anda yakin ingin menghapus user ${user.name || user.Name}?`)) return;
+        const authUser = localStorage.getItem("cms_user");
+        const parsed = authUser ? JSON.parse(authUser) : null;
+        try {
+            const userId = user.id || user.ID;
+            const res = await fetch(`${API_BASE}/users?id=${userId}`, {
+                method: "DELETE",
+                headers: {
+                    "X-User-Role": parsed?.Role || parsed?.role || "",
+                    "X-User-ID": parsed?.ID || parsed?.id || "",
+                },
+            });
+            if (res.ok) {
+                fetchUsers();
+            } else {
+                const err = await res.json();
+                alert(err.error || "Gagal menghapus user");
+            }
+        } catch (error) {
+            console.error("Failed to delete user", error);
+        }
+    };
+
     return (
         <DashboardLayout>
             <div className="flex flex-col gap-6 pb-10">
@@ -127,9 +196,17 @@ export default function UsersPage() {
                                             <p className="font-semibold text-sm text-default-700">{item.role || item.Role}</p>
                                         </TableCell>
                                         <TableCell className="py-4 text-center">
-                                            <Button onPress={() => toggleUserStatus(item)} variant="flat" size="sm" color={(item.status || item.Status) === 'Active' ? 'danger' : 'success'} className="font-medium">
-                                                {(item.status || item.Status) === 'Active' ? 'Nonaktifkan' : 'Aktifkan'}
-                                            </Button>
+                                            <div className="flex justify-center items-center gap-2">
+                                                <Button onPress={() => toggleUserStatus(item)} variant="flat" size="sm" color={(item.status || item.Status) === 'Active' ? 'warning' : 'success'} className="font-medium min-w-max">
+                                                    {(item.status || item.Status) === 'Active' ? 'Nonaktifkan' : 'Aktifkan'}
+                                                </Button>
+                                                <Button onPress={() => openEditModal(item)} isIconOnly variant="flat" size="sm" color="primary">
+                                                    <Pencil className="w-4 h-4" />
+                                                </Button>
+                                                <Button onPress={() => handleDeleteUser(item)} isIconOnly variant="flat" size="sm" color="danger">
+                                                    <Trash2 className="w-4 h-4" />
+                                                </Button>
+                                            </div>
                                         </TableCell>
                                     </TableRow>
                                 ))}
@@ -185,6 +262,71 @@ export default function UsersPage() {
                                     </Button>
                                     <Button color="primary" onPress={handleCreateUser} isLoading={isLoading} className="bg-blue-600 font-medium">
                                         Tambah Pengguna
+                                    </Button>
+                                </ModalFooter>
+                            </>
+                        )}
+                    </ModalContent>
+                </Modal>
+
+                {/* Modal Edit User */}
+                <Modal isOpen={isEditOpen} onOpenChange={onEditOpenChange} size="md">
+                    <ModalContent>
+                        {(onClose) => (
+                            <>
+                                <ModalHeader className="flex flex-col gap-1 border-b border-default-100 pb-4">
+                                    <h2 className="text-xl font-bold">Edit Pengguna</h2>
+                                    <p className="text-sm text-default-500 font-normal">Ubah detail pengguna.</p>
+                                </ModalHeader>
+                                <ModalBody className="py-6 gap-6">
+                                    <div className="flex flex-col gap-4">
+                                        <Input
+                                            label="Nama Lengkap"
+                                            labelPlacement="outside"
+                                            placeholder="Masukkan nama lengkap"
+                                            variant="bordered"
+                                            value={editName}
+                                            onChange={(e) => setEditName(e.target.value)}
+                                        />
+                                        <Input
+                                            type="email"
+                                            label="Alamat Email"
+                                            labelPlacement="outside"
+                                            placeholder="email@perusahaan.com"
+                                            variant="bordered"
+                                            value={editEmail}
+                                            onChange={(e) => setEditEmail(e.target.value)}
+                                        />
+                                        <Select
+                                            label="Peran / Role"
+                                            labelPlacement="outside"
+                                            placeholder="Pilih peran pengguna"
+                                            variant="bordered"
+                                            selectedKeys={editRole ? [editRole] : []}
+                                            onChange={(e) => setEditRole(e.target.value)}
+                                        >
+                                            <SelectItem key="Manajer" description="Approve, Revisi, dan pantau performa">Manajer</SelectItem>
+                                            <SelectItem key="Kreator" description="Mengajukan draft & CRUD Konten">Kreator</SelectItem>
+                                        </Select>
+                                        <Select
+                                            label="Status"
+                                            labelPlacement="outside"
+                                            placeholder="Pilih status"
+                                            variant="bordered"
+                                            selectedKeys={editStatus ? [editStatus] : []}
+                                            onChange={(e) => setEditStatus(e.target.value)}
+                                        >
+                                            <SelectItem key="Active">Active</SelectItem>
+                                            <SelectItem key="Offline">Offline</SelectItem>
+                                        </Select>
+                                    </div>
+                                </ModalBody>
+                                <ModalFooter className="border-t border-default-100 pt-4">
+                                    <Button variant="flat" color="danger" onPress={onClose}>
+                                        Batal
+                                    </Button>
+                                    <Button color="primary" onPress={handleEditUser} isLoading={isLoading} className="bg-blue-600 font-medium">
+                                        Simpan Perubahan
                                     </Button>
                                 </ModalFooter>
                             </>

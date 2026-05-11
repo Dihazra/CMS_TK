@@ -22,3 +22,13 @@ UPDATE users
 SET role = $2, updated_at = NOW()
 WHERE id = $1
 RETURNING *;
+
+-- name: UpdateUser :one
+UPDATE users
+SET name = $2, email = $3, role = $4, status = $5, updated_at = NOW()
+WHERE id = $1
+RETURNING *;
+
+-- name: DeleteUser :exec
+DELETE FROM users
+WHERE id = $1;

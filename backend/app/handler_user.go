@@ -118,3 +118,91 @@ func (apiCfg *apiConfig) handlerUpdateUserStatus(w http.ResponseWriter, r *http.
 
 	respondWithJSON(w, http.StatusOK, user)
 }
+
+// ─── PUT /v1/users?id= ───────────────────────────────────────────────────────
+func (apiCfg *apiConfig) handlerUpdateUser(w http.ResponseWriter, r *http.Request) {
+	role := getRoleFromHeader(r)
+	if role != "Manajer" {
+		respondWithError(w, http.StatusForbidden, "Hanya Manajer yang dapat mengedit user")
+		return
+	}
+
+	userIDStr := r.URL.Query().Get("id")
+	userID, err := uuid.Parse(userIDStr)
+	if err != nil {
+		respondWithError(w, http.StatusBadRequest, "Invalid user ID")
+		return
+	}
+
+	type parameters struct {
+		Name   string `json:"name"`
+		Email  string `json:"email"`
+		Role   string `json:"role"`
+		Status string `json:"status"`
+	}
+	decoder := json.NewDecoder(r.Body)
+	params := parameters{}
+	if err := decoder.Decode(&params); err != nil {
+		respondWithError(w, http.StatusBadRequest, "Invalid request payload")
+		return
+	}
+
+	if params.Role != "Manajer" && params.Role != "Kreator" {
+		respondWithError(w, http.StatusBadRequest, "Role harus Manajer atau Kreator")
+		return
+	}
+
+	if params.Status != "Active" && params.Status != "Offline" {
+		respondWithError(w, http.StatusBadRequest, "Status harus Active atau Offline")
+		return
+	}
+
+	if params.Name == "" || params.Email == "" {
+		respondWithError(w, http.StatusBadRequest, "name dan email wajib diisi")
+		return
+	}
+
+	user, err := apiCfg.DB.UpdateUser(r.Context(), database.UpdateUserParams{
+		ID:     userID,
+		Name:   params.Name,
+		Email:  params.Email,
+		Role:   params.Role,
+		Status: params.Status,
+	})
+	if err != nil {
+		log.Println("Error updating user:", err)
+		respondWithError(w, http.StatusInternalServerError, "Failed to update user")
+		return
+	}
+
+	apiCfg.logAudit(r, "Update User", "user", user.ID.String(), "Updated user details: "+user.Name)
+
+	respondWithJSON(w, http.StatusOK, user)
+}
+
+// ─── DELETE /v1/users?id= ────────────────────────────────────────────────────
+func (apiCfg *apiConfig) handlerDeleteUser(w http.ResponseWriter, r *http.Request) {
+	role := getRoleFromHeader(r)
+	if role != "Manajer" {
+		respondWithError(w, http.StatusForbidden, "Hanya Manajer yang dapat menghapus user")
+		return
+	}
+
+	userIDStr := r.URL.Query().Get("id")
+	userID, err := uuid.Parse(userIDStr)
+	if err != nil {
+		respondWithError(w, http.StatusBadRequest, "Invalid user ID")
+		return
+	}
+
+	err = apiCfg.DB.DeleteUser(r.Context(), userID)
+	if err != nil {
+		log.Println("Error deleting user:", err)
+		respondWithError(w, http.StatusInternalServerError, "Failed to delete user")
+		return
+	}
+
+	apiCfg.logAudit(r, "Delete User", "user", userID.String(), "Deleted user ID: "+userID.String())
+
+	respondWithJSON(w, http.StatusOK, map[string]string{"message": "User deleted successfully"})
+}

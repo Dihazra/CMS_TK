@@ -51,6 +51,16 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, e
 	return i, err
 }
 
+const deleteUser = `-- name: DeleteUser :exec
+DELETE FROM users
+WHERE id = $1
+`
+
+func (q *Queries) DeleteUser(ctx context.Context, id uuid.UUID) error {
+	_, err := q.db.ExecContext(ctx, deleteUser, id)
+	return err
+}
+
 const getUserByID = `-- name: GetUserByID :one
 SELECT id, name, email, role, status, created_at, updated_at FROM users
 WHERE id = $1
@@ -105,6 +115,42 @@ func (q *Queries) GetUsers(ctx context.Context) ([]User, error) {
 		return nil, err
 	}
 	return items, nil
+}
+
+const updateUser = `-- name: UpdateUser :one
+UPDATE users
+SET name = $2, email = $3, role = $4, status = $5, updated_at = NOW()
+WHERE id = $1
+RETURNING id, name, email, role, status, created_at, updated_at
+`
+
+type UpdateUserParams struct {
+	ID     uuid.UUID
+	Name   string
+	Email  string
+	Role   string
+	Status string
+}
+
+func (q *Queries) UpdateUser(ctx context.Context, arg UpdateUserParams) (User, error) {
+	row := q.db.QueryRowContext(ctx, updateUser,
+		arg.ID,
+		arg.Name,
+		arg.Email,
+		arg.Role,
+		arg.Status,
+	)
+	var i User
+	err := row.Scan(
+		&i.ID,
+		&i.Name,
+		&i.Email,
+		&i.Role,
+		&i.Status,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
 }
 
 const updateUserRole = `-- name: UpdateUserRole :one
