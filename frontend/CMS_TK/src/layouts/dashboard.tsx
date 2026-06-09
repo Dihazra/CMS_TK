@@ -61,11 +61,11 @@ export default function DashboardLayout({
     }, []);
 
     return (
-        <div className="flex h-screen w-full bg-[#f4f4f5] overflow-hidden font-sans relative">
+        <div className="flex h-screen w-full bg-[#f8fafc] overflow-hidden font-sans relative">
             {/* Mobile Overlay */}
             {isSidebarOpen && (
                 <div 
-                    className="fixed inset-0 bg-black/50 z-40 md:hidden transition-opacity"
+                    className="fixed inset-0 bg-black/40 z-40 md:hidden transition-opacity"
                     onClick={() => setIsSidebarOpen(false)}
                 />
             )}
@@ -76,24 +76,24 @@ export default function DashboardLayout({
             </div>
 
             <div className="flex flex-col flex-1 overflow-hidden w-full">
-                <header className="h-16 md:h-24 bg-white md:bg-transparent flex items-center justify-between px-4 md:px-10 border-b md:border-none border-default-200">
+                <header className="h-16 bg-white flex items-center justify-between px-6 md:px-10 border-b border-slate-100">
                     <div className="flex items-center gap-3">
                         <Button isIconOnly variant="light" className="md:hidden" onPress={() => setIsSidebarOpen(true)}>
-                            <Menu className="w-6 h-6 text-default-700" />
+                            <Menu className="w-5 h-5 text-slate-600" />
                         </Button>
-                        <h2 className="text-xl md:text-3xl font-bold tracking-tight text-foreground md:hidden">CMS</h2>
+                        <h2 className="text-lg font-bold tracking-tight text-slate-800 md:hidden">CMS</h2>
                     </div>
-                    <div className="flex items-center gap-3">
-                        <div className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-100/50">
-                            <User className="text-blue-600 w-4 h-4" strokeWidth={2} />
+                    <div className="flex items-center gap-2">
+                        <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-slate-100 text-slate-600 shadow-sm border border-slate-200/50">
+                            <User className="w-4 h-4" strokeWidth={2.2} />
                         </div>
                         <div className="flex flex-col">
-                            <span className="text-default-800 text-sm font-semibold hidden sm:block">{userName}</span>
+                            <span className="text-slate-700 text-sm font-semibold hidden sm:block">{userName}</span>
                         </div>
                     </div>
                 </header>
 
-                <main className="flex-1 overflow-y-auto px-4 md:px-10 pb-8 pt-6 md:pt-0">
+                <main className="flex-1 overflow-y-auto p-6 md:p-10">
                     {children}
                 </main>
             </div>

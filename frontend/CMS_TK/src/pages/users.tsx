@@ -162,57 +162,83 @@ export default function UsersPage() {
 
     return (
         <DashboardLayout>
-            <div className="flex flex-col gap-6 pb-10">
-                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end border-b border-default-200 pb-4 pt-2 gap-4 sm:gap-0">
+            <div className="flex flex-col gap-6 pb-10 font-sans">
+                {/* Header */}
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end border-b border-slate-100 pb-4 pt-2 gap-4 sm:gap-0">
                     <div>
-                        <h1 className="text-2xl sm:text-3xl font-bold text-default-900 tracking-tight">Manajemen User</h1>
-                        <p className="text-default-500 mt-1 text-sm sm:text-base">Kelola akses dan peran anggota tim kreatif Anda.</p>
+                        <h1 className="text-2xl font-bold text-slate-800 tracking-tight">Manajemen User</h1>
+                        <p className="text-slate-500 mt-1 text-sm">Kelola akses dan peran anggota tim kreatif Anda.</p>
                     </div>
-                    <Button onPress={onOpen} color="primary" className="font-medium bg-blue-600 shadow-lg shadow-blue-500/30 font-semibold w-full sm:w-auto" startContent={<Plus className="w-4 h-4" />}>
+                    <Button onPress={onOpen} color="primary" className="font-medium bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm w-full sm:w-auto" startContent={<Plus className="w-4 h-4" />}>
                         Tambah User
                     </Button>
                 </div>
 
-                <Card shadow="sm" radius="lg" className="border border-default-100 bg-white group">
+                {/* Tabel */}
+                <Card shadow="sm" className="border border-slate-200/80 bg-white">
                     <CardBody className="p-0">
                         <div className="overflow-x-auto w-full">
                             <Table aria-label="Daftar User" shadow="none" removeWrapper className="w-full min-w-[600px]">
-                            <TableHeader>
-                                <TableColumn className="bg-default-50/80 text-default-500 font-semibold uppercase text-[10px] tracking-wider py-4">Pengguna</TableColumn>
-                                <TableColumn className="bg-default-50/80 text-default-500 font-semibold uppercase text-[10px] tracking-wider py-4">Peran</TableColumn>
-                                <TableColumn className="bg-default-50/80 text-default-500 font-semibold uppercase text-[10px] tracking-wider py-4 text-center">Aksi</TableColumn>
-                            </TableHeader>
-                            <TableBody>
-                                {users.map((item, id) => (
-                                    <TableRow key={id} className="hover:bg-default-50 transition-colors border-b border-default-100 last:border-none">
-                                        <TableCell className="py-4">
-                                            <div className="flex items-center gap-3 w-max">
-                                                <Avatar name={item.name || item.Name} className="w-10 h-10 text-sm font-bold shadow-md opacity-90" />
-                                                <div>
-                                                    <p className="font-bold text-sm text-default-900">{item.name || item.Name}</p>
-                                                    <p className="text-xs text-default-500 font-medium">{item.email || item.Email}</p>
-                                                </div>
-                                            </div>
-                                        </TableCell>
-                                        <TableCell className="py-4">
-                                            <p className="font-semibold text-sm text-default-700">{item.role || item.Role}</p>
-                                        </TableCell>
-                                        <TableCell className="py-4 text-center">
-                                            <div className="flex justify-center items-center gap-2">
-                                                <Button onPress={() => toggleUserStatus(item)} variant="flat" size="sm" color={(item.status || item.Status) === 'Active' ? 'warning' : 'success'} className="font-medium min-w-max">
-                                                    {(item.status || item.Status) === 'Active' ? 'Nonaktifkan' : 'Aktifkan'}
-                                                </Button>
-                                                <Button onPress={() => openEditModal(item)} isIconOnly variant="flat" size="sm" color="primary">
-                                                    <Pencil className="w-4 h-4" />
-                                                </Button>
-                                                <Button onPress={() => handleDeleteUser(item)} isIconOnly variant="flat" size="sm" color="danger">
-                                                    <Trash2 className="w-4 h-4" />
-                                                </Button>
-                                            </div>
-                                        </TableCell>
-                                    </TableRow>
-                                ))}
-                            </TableBody>
+                                <TableHeader>
+                                    <TableColumn className="bg-slate-50/50 text-slate-500 font-bold uppercase text-[10px] tracking-wider py-4">Pengguna</TableColumn>
+                                    <TableColumn className="bg-slate-50/50 text-slate-500 font-bold uppercase text-[10px] tracking-wider py-4">Peran</TableColumn>
+                                    <TableColumn className="bg-slate-50/50 text-slate-500 font-bold uppercase text-[10px] tracking-wider py-4 text-center">Aksi</TableColumn>
+                                </TableHeader>
+                                <TableBody>
+                                    {users.map((item, id) => {
+                                        const isActive = (item.status || item.Status) === 'Active';
+                                        return (
+                                            <TableRow key={id} className="hover:bg-slate-50/40 transition-colors border-b border-slate-100 last:border-none">
+                                                <TableCell className="py-4">
+                                                    <div className="flex items-center gap-3 w-max">
+                                                        <Avatar name={item.name || item.Name} className="w-9 h-9 text-xs font-bold" />
+                                                        <div>
+                                                            <p className="font-bold text-sm text-slate-800">{item.name || item.Name}</p>
+                                                            <p className="text-xs text-slate-400 font-semibold">{item.email || item.Email}</p>
+                                                        </div>
+                                                    </div>
+                                                </TableCell>
+                                                <TableCell className="py-4">
+                                                    <p className="font-semibold text-sm text-slate-700">{item.role || item.Role}</p>
+                                                </TableCell>
+                                                <TableCell className="py-4 text-center">
+                                                    <div className="flex justify-center items-center gap-2">
+                                                        <Button 
+                                                            onPress={() => toggleUserStatus(item)} 
+                                                            variant="flat" 
+                                                            size="sm" 
+                                                            className={`font-bold border min-w-max ${
+                                                                isActive 
+                                                                    ? "bg-amber-50 text-amber-700 hover:bg-amber-100 border-amber-100/50" 
+                                                                    : "bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border-emerald-100/50"
+                                                            }`}
+                                                        >
+                                                            {isActive ? 'Nonaktifkan' : 'Aktifkan'}
+                                                        </Button>
+                                                        <Button 
+                                                            onPress={() => openEditModal(item)} 
+                                                            isIconOnly 
+                                                            variant="flat" 
+                                                            size="sm" 
+                                                            className="bg-slate-100 text-slate-650 hover:bg-slate-200 border border-slate-200/40"
+                                                        >
+                                                            <Pencil className="w-4 h-4" />
+                                                        </Button>
+                                                        <Button 
+                                                            onPress={() => handleDeleteUser(item)} 
+                                                            isIconOnly 
+                                                            variant="flat" 
+                                                            size="sm" 
+                                                            className="bg-rose-50 text-rose-700 hover:bg-rose-100 border border-rose-100/30"
+                                                        >
+                                                            <Trash2 className="w-4 h-4" />
+                                                        </Button>
+                                                    </div>
+                                                </TableCell>
+                                            </TableRow>
+                                        );
+                                    })}
+                                </TableBody>
                             </Table>
                         </div>
                     </CardBody>
@@ -223,11 +249,11 @@ export default function UsersPage() {
                     <ModalContent>
                         {(onClose) => (
                             <>
-                                <ModalHeader className="flex flex-col gap-1 border-b border-default-100 pb-4">
-                                    <h2 className="text-xl font-bold">Tambah Pengguna Baru</h2>
-                                    <p className="text-sm text-default-500 font-normal">Tambahkan email anggota tim Anda ke dalam sistem.</p>
+                                <ModalHeader className="flex flex-col gap-1 border-b border-slate-100 pb-4">
+                                    <h2 className="text-lg font-bold text-slate-800">Tambah Pengguna Baru</h2>
+                                    <p className="text-xs text-slate-500 font-normal">Tambahkan email anggota tim Anda ke dalam sistem.</p>
                                 </ModalHeader>
-                                <ModalBody className="py-6 gap-6">
+                                <ModalBody className="py-6 gap-5">
                                     <div className="flex flex-col gap-4">
                                         <Input
                                             label="Nama Lengkap"
@@ -236,6 +262,9 @@ export default function UsersPage() {
                                             variant="bordered"
                                             value={name}
                                             onChange={(e) => setName(e.target.value)}
+                                            classNames={{
+                                                inputWrapper: "bg-slate-50 border-slate-200 hover:border-slate-300 focus-within:!border-indigo-500 transition-colors"
+                                            }}
                                         />
                                         <Input
                                             type="email"
@@ -245,6 +274,9 @@ export default function UsersPage() {
                                             variant="bordered"
                                             value={email}
                                             onChange={(e) => setEmail(e.target.value)}
+                                            classNames={{
+                                                inputWrapper: "bg-slate-50 border-slate-200 hover:border-slate-300 focus-within:!border-indigo-500 transition-colors"
+                                            }}
                                         />
                                         <Select
                                             label="Peran / Role"
@@ -253,17 +285,20 @@ export default function UsersPage() {
                                             variant="bordered"
                                             selectedKeys={role ? [role] : []}
                                             onChange={(e) => setRole(e.target.value)}
+                                            classNames={{
+                                                trigger: "bg-slate-50 border-slate-200 hover:border-slate-300 focus-within:!border-indigo-500 transition-colors"
+                                            }}
                                         >
                                             <SelectItem key="Manajer" description="Approve, Revisi, dan pantau performa">Manajer</SelectItem>
                                             <SelectItem key="Kreator" description="Mengajukan draft & CRUD Konten">Kreator</SelectItem>
                                         </Select>
                                     </div>
                                 </ModalBody>
-                                <ModalFooter className="border-t border-default-100 pt-4">
-                                    <Button variant="flat" color="danger" onPress={onClose}>
+                                <ModalFooter className="border-t border-slate-100 pt-4">
+                                    <Button variant="flat" color="danger" onPress={onClose} className="font-semibold">
                                         Batal
                                     </Button>
-                                    <Button color="primary" onPress={handleCreateUser} isLoading={isLoading} className="bg-blue-600 font-medium">
+                                    <Button onPress={handleCreateUser} isLoading={isLoading} className="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold shadow-sm px-6">
                                         Tambah Pengguna
                                     </Button>
                                 </ModalFooter>
@@ -277,11 +312,11 @@ export default function UsersPage() {
                     <ModalContent>
                         {(onClose) => (
                             <>
-                                <ModalHeader className="flex flex-col gap-1 border-b border-default-100 pb-4">
-                                    <h2 className="text-xl font-bold">Edit Pengguna</h2>
-                                    <p className="text-sm text-default-500 font-normal">Ubah detail pengguna.</p>
+                                <ModalHeader className="flex flex-col gap-1 border-b border-slate-100 pb-4">
+                                    <h2 className="text-lg font-bold text-slate-800">Edit Pengguna</h2>
+                                    <p className="text-xs text-slate-500 font-normal">Ubah detail pengguna.</p>
                                 </ModalHeader>
-                                <ModalBody className="py-6 gap-6">
+                                <ModalBody className="py-6 gap-5">
                                     <div className="flex flex-col gap-4">
                                         <Input
                                             label="Nama Lengkap"
@@ -290,6 +325,9 @@ export default function UsersPage() {
                                             variant="bordered"
                                             value={editName}
                                             onChange={(e) => setEditName(e.target.value)}
+                                            classNames={{
+                                                inputWrapper: "bg-slate-50 border-slate-200 hover:border-slate-300 focus-within:!border-indigo-500 transition-colors"
+                                            }}
                                         />
                                         <Input
                                             type="email"
@@ -299,6 +337,9 @@ export default function UsersPage() {
                                             variant="bordered"
                                             value={editEmail}
                                             onChange={(e) => setEditEmail(e.target.value)}
+                                            classNames={{
+                                                inputWrapper: "bg-slate-50 border-slate-200 hover:border-slate-300 focus-within:!border-indigo-500 transition-colors"
+                                            }}
                                         />
                                         <Select
                                             label="Peran / Role"
@@ -307,6 +348,9 @@ export default function UsersPage() {
                                             variant="bordered"
                                             selectedKeys={editRole ? [editRole] : []}
                                             onChange={(e) => setEditRole(e.target.value)}
+                                            classNames={{
+                                                trigger: "bg-slate-50 border-slate-200 hover:border-slate-300 focus-within:!border-indigo-500 transition-colors"
+                                            }}
                                         >
                                             <SelectItem key="Manajer" description="Approve, Revisi, dan pantau performa">Manajer</SelectItem>
                                             <SelectItem key="Kreator" description="Mengajukan draft & CRUD Konten">Kreator</SelectItem>
@@ -318,17 +362,20 @@ export default function UsersPage() {
                                             variant="bordered"
                                             selectedKeys={editStatus ? [editStatus] : []}
                                             onChange={(e) => setEditStatus(e.target.value)}
+                                            classNames={{
+                                                trigger: "bg-slate-50 border-slate-200 hover:border-slate-300 focus-within:!border-indigo-500 transition-colors"
+                                            }}
                                         >
                                             <SelectItem key="Active">Active</SelectItem>
                                             <SelectItem key="Offline">Offline</SelectItem>
                                         </Select>
                                     </div>
                                 </ModalBody>
-                                <ModalFooter className="border-t border-default-100 pt-4">
-                                    <Button variant="flat" color="danger" onPress={onClose}>
+                                <ModalFooter className="border-t border-slate-100 pt-4">
+                                    <Button variant="flat" color="danger" onPress={onClose} className="font-semibold">
                                         Batal
                                     </Button>
-                                    <Button color="primary" onPress={handleEditUser} isLoading={isLoading} className="bg-blue-600 font-medium">
+                                    <Button onPress={handleEditUser} isLoading={isLoading} className="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold shadow-sm px-6">
                                         Simpan Perubahan
                                     </Button>
                                 </ModalFooter>

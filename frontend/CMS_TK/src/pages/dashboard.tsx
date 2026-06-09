@@ -65,21 +65,21 @@ export default function DashboardPage() {
 
     // ─── color helpers ────────────────────────────────────────────────────────
     const getPillarColor = (pillar: string) => {
-        if (!pillar || pillar === "-") return "bg-transparent text-transparent";
+        if (!pillar || pillar === "-") return "bg-transparent text-transparent border-transparent";
         switch (pillar.toLowerCase()) {
-            case "education": return "bg-danger-100 text-danger-700 border border-danger-200";
-            case "relatable": return "bg-warning-100 text-warning-800 border border-warning-200";
-            case "soal ukom": return "bg-success-100 text-success-700 border border-success-200";
-            default: return "bg-blue-100 text-blue-700 border border-blue-200";
+            case "education": return "bg-rose-50 text-rose-700 border border-rose-100";
+            case "relatable": return "bg-amber-50 text-amber-800 border border-amber-100";
+            case "soal ukom": return "bg-emerald-50 text-emerald-700 border border-emerald-100";
+            default: return "bg-indigo-50 text-indigo-700 border border-indigo-100";
         }
     };
 
     const getPicColor = (pic: string) => {
-        if (!pic || pic === "-") return "bg-default-100 text-default-600 border border-default-200";
+        if (!pic || pic === "-") return "bg-slate-50 text-slate-500 border border-slate-200/60";
         const len = pic.length;
-        if (len % 3 === 0) return "bg-purple-100 text-purple-700 border border-purple-200";
-        if (len % 2 === 0) return "bg-blue-100 text-blue-700 border border-blue-200";
-        return "bg-emerald-100 text-emerald-700 border border-emerald-200";
+        if (len % 3 === 0) return "bg-violet-50 text-violet-700 border border-violet-100";
+        if (len % 2 === 0) return "bg-sky-50 text-sky-700 border border-sky-100";
+        return "bg-teal-50 text-teal-700 border border-teal-100";
     };
 
     const getPlanStatusChip = (status: string) => {
@@ -236,105 +236,98 @@ export default function DashboardPage() {
     // ─── render ───────────────────────────────────────────────────────────────
     return (
         <DashboardLayout>
-            <div className="flex flex-col gap-8 pb-10">
-
+            <div className="flex flex-col gap-6 pb-10 font-sans">
                 {/* Header */}
-                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-4 border-b border-default-200 gap-4 sm:gap-0">
-                    <div>
-                        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-default-900">Overview</h1>
-                        <p className="text-default-500 mt-1 text-sm sm:text-base">Pantau performa dan tugas kreatif tim Anda hari ini.</p>
-                    </div>
+                <div className="pb-4 border-b border-slate-100">
+                    <h1 className="text-2xl font-bold tracking-tight text-slate-800">Ringkasan</h1>
+                    <p className="text-slate-500 mt-1 text-sm">Pantau performa dan tugas kreatif tim Anda hari ini.</p>
                 </div>
 
                 {/* Stats */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <Card shadow="sm" radius="lg" className="border border-default-100 bg-gradient-to-br from-white to-default-50 overflow-visible relative group">
-                        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-400 to-blue-600 rounded-t-lg opacity-0 group-hover:opacity-100 transition-opacity" />
-                        <CardBody className="px-6 py-5 flex items-start gap-4 flex-row justify-between">
-                            <div>
-                                <p className="text-default-500 text-sm font-semibold uppercase tracking-wider">Total Konten</p>
-                                <div className="flex items-baseline gap-3 mt-2">
-                                    <h4 className="text-5xl font-bold text-default-900">{stats.total}</h4>
-                                    <span className="flex items-center text-sm font-medium text-success-600 bg-success-50 px-2 py-0.5 rounded-full">
-                                        <TrendingUp className="w-3 h-3 mr-1" />+12%
+                    <Card shadow="sm" className="border border-slate-200/80 bg-white">
+                        <CardBody className="p-6 flex items-center justify-between flex-row">
+                            <div className="space-y-1">
+                                <p className="text-slate-400 text-xs font-semibold uppercase tracking-wider">Total Konten</p>
+                                <div className="flex items-baseline gap-2.5">
+                                    <h4 className="text-4xl font-extrabold text-slate-800">{stats.total}</h4>
+                                    <span className="inline-flex items-center text-xs font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md">
+                                        <TrendingUp className="w-3.5 h-3.5 mr-1" />+12%
                                     </span>
                                 </div>
                             </div>
-                            <div className="p-3 bg-blue-50 text-blue-600 rounded-xl shadow-inner">
-                                <FileText className="w-8 h-8" strokeWidth={1.5} />
+                            <div className="w-12 h-12 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center border border-indigo-100/50 shadow-sm">
+                                <FileText className="w-6 h-6" strokeWidth={2} />
                             </div>
                         </CardBody>
                     </Card>
 
-                    <Card shadow="sm" radius="lg" className="border border-default-100 bg-gradient-to-br from-white to-default-50 overflow-visible relative group">
-                        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-warning-400 to-warning-600 rounded-t-lg opacity-0 group-hover:opacity-100 transition-opacity" />
-                        <CardBody className="px-6 py-5 flex items-start gap-4 flex-row justify-between">
-                            <div>
-                                <p className="text-default-500 text-sm font-semibold uppercase tracking-wider">Menunggu Review</p>
-                                <div className="flex items-baseline gap-3 mt-2">
-                                    <h4 className="text-5xl font-bold text-default-900">{stats.review}</h4>
-                                    <span className="flex items-center text-sm font-medium text-danger-600 bg-danger-50 px-2 py-0.5 rounded-full">
-                                        <TrendingUp className="w-3 h-3 mr-1" />+{stats.review}
-                                    </span>
+                    <Card shadow="sm" className="border border-slate-200/80 bg-white">
+                        <CardBody className="p-6 flex items-center justify-between flex-row">
+                            <div className="space-y-1">
+                                <p className="text-slate-400 text-xs font-semibold uppercase tracking-wider">Menunggu Review</p>
+                                <div className="flex items-baseline gap-2.5">
+                                    <h4 className="text-4xl font-extrabold text-slate-800">{stats.review}</h4>
+                                    {stats.review > 0 && (
+                                        <span className="inline-flex items-center text-xs font-semibold text-amber-700 bg-amber-50 px-2 py-0.5 rounded-md">
+                                            <TrendingUp className="w-3.5 h-3.5 mr-1" />+{stats.review}
+                                        </span>
+                                    )}
                                 </div>
                             </div>
-                            <div className="p-3 bg-warning-50 text-warning-600 rounded-xl shadow-inner">
-                                <Clock className="w-8 h-8" strokeWidth={1.5} />
+                            <div className="w-12 h-12 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center border border-amber-100/50 shadow-sm">
+                                <Clock className="w-6 h-6" strokeWidth={2} />
                             </div>
                         </CardBody>
                     </Card>
 
-                    <Card shadow="sm" radius="lg" className="border border-default-100 bg-gradient-to-br from-white to-default-50 overflow-visible relative group">
-                        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-danger-400 to-danger-600 rounded-t-lg opacity-0 group-hover:opacity-100 transition-opacity" />
-                        <CardBody className="px-6 py-5 flex items-start gap-4 flex-row justify-between">
-                            <div>
-                                <p className="text-default-500 text-sm font-semibold uppercase tracking-wider">Perlu Revisi</p>
-                                <div className="flex items-baseline gap-3 mt-2">
-                                    <h4 className="text-5xl font-bold text-default-900">{stats.revisi}</h4>
-                                    <span className="flex items-center text-sm font-medium text-warning-600 bg-warning-50 px-2 py-0.5 rounded-full">
-                                        <TrendingDown className="w-3 h-3 mr-1" />-1
+                    <Card shadow="sm" className="border border-slate-200/80 bg-white">
+                        <CardBody className="p-6 flex items-center justify-between flex-row">
+                            <div className="space-y-1">
+                                <p className="text-slate-400 text-xs font-semibold uppercase tracking-wider">Perlu Revisi</p>
+                                <div className="flex items-baseline gap-2.5">
+                                    <h4 className="text-4xl font-extrabold text-slate-800">{stats.revisi}</h4>
+                                    <span className="inline-flex items-center text-xs font-semibold text-rose-700 bg-rose-50 px-2 py-0.5 rounded-md">
+                                        <TrendingDown className="w-3.5 h-3.5 mr-1" />-1
                                     </span>
                                 </div>
                             </div>
-                            <div className="p-3 bg-danger-50 text-danger-600 rounded-xl shadow-inner">
-                                <AlertCircle className="w-8 h-8" strokeWidth={1.5} />
+                            <div className="w-12 h-12 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center border border-rose-100/50 shadow-sm">
+                                <AlertCircle className="w-6 h-6" strokeWidth={2} />
                             </div>
                         </CardBody>
                     </Card>
                 </div>
 
                 {/* Content Planner Calendar */}
-                <Card shadow="sm" radius="lg" className="border border-default-100 bg-white overflow-hidden">
-                    <div className="px-6 py-5 border-b border-default-100 flex flex-col sm:flex-row items-start sm:items-center justify-between bg-white gap-4 sm:gap-0">
+                <Card shadow="sm" className="border border-slate-200/80 bg-white overflow-hidden">
+                    <div className="px-6 py-5 border-b border-slate-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                         <div>
-                            <h4 className="text-lg font-bold text-default-900">Jadwal Content Planner</h4>
-                            <p className="text-sm font-medium text-default-500 mt-1">Periode: {getDisplayMonth()}</p>
+                            <h4 className="text-base font-bold text-slate-800">Jadwal Content Planner</h4>
+                            <p className="text-xs font-medium text-slate-400 mt-0.5">Periode: {getDisplayMonth()}</p>
                         </div>
-                        <div className="flex items-center gap-4 w-full sm:w-auto">
-                            <div className="flex items-center gap-1 bg-default-100 p-1 rounded-lg border border-default-200 w-full sm:w-auto justify-between sm:justify-start">
-                                <Button size="sm" isIconOnly variant="flat" onPress={() => setWeekOffset(w => w - 4)}>
-                                    <ChevronLeft className="w-4 h-4 text-default-600" />
-                                </Button>
-                                <span className="text-xs font-semibold px-4 sm:px-2 text-default-600">Geser Bulan</span>
-                                <Button size="sm" isIconOnly variant="flat" onPress={() => setWeekOffset(w => w + 4)}>
-                                    <ChevronRight className="w-4 h-4 text-default-600" />
-                                </Button>
-                            </div>
+                        <div className="flex items-center gap-1.5 bg-slate-100/80 p-1 rounded-xl border border-slate-200/40">
+                            <Button size="sm" isIconOnly variant="light" className="text-slate-600 h-8 w-8 min-w-8" onPress={() => setWeekOffset(w => w - 4)}>
+                                <ChevronLeft className="w-4 h-4" />
+                            </Button>
+                            <span className="text-[11px] font-bold px-2 text-slate-500 uppercase tracking-wider">Geser Bulan</span>
+                            <Button size="sm" isIconOnly variant="light" className="text-slate-600 h-8 w-8 min-w-8" onPress={() => setWeekOffset(w => w + 4)}>
+                                <ChevronRight className="w-4 h-4" />
+                            </Button>
                         </div>
                     </div>
-                    <CardBody className="p-0 overflow-x-auto bg-default-50/30">
-                        <div className="min-w-[800px]">
-                            {/* Header */}
-                            <div className="grid grid-cols-8 border-b-2 border-default-300 bg-blue-50">
-                                <div className="p-2 text-center text-xs font-bold text-default-600 uppercase border-r border-default-200 flex items-center justify-center">Keterangan</div>
-                                {["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu", "Minggu"].map((day, i) => (
-                                    <div key={day} className={`p-2 text-center text-xs font-bold text-default-700 border-default-200 ${i !== 6 ? "border-r" : ""}`}>
+                    <CardBody className="p-0 overflow-x-auto bg-slate-50/20"> 
+                        <div className="min-w-[900px]">
+                            {/* Days of Week Header */}
+                            <div className="grid grid-cols-7 border-b border-slate-500 bg-slate-950">
+                                {['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'].map((day, i) => (
+                                    <div key={day} className={`p-3 text-center text-xs font-bold text-white border-slate-500 ${i !== 6 ? "border-r" : ""}`}>
                                         {day}
                                     </div>
                                 ))}
                             </div>
 
-                            {/* 4 Weeks */}
+                            {/* 4 Weeks Grid */}
                             {[0, 1, 2, 3].map((weekNumber) => {
                                 const daysInWeek = Array.from({ length: 7 }).map((_, i) => {
                                     const dateObj = new Date();
@@ -342,87 +335,81 @@ export default function DashboardPage() {
                                     dateObj.setDate(dateObj.getDate() - dayOfWeek + 1 + (weekNumber + weekOffset) * 7 + i);
                                     const dateKey = `${dateObj.getFullYear()}-${String(dateObj.getMonth() + 1).padStart(2, "0")}-${String(dateObj.getDate()).padStart(2, "0")}`;
                                     const dataItem = plannerDict[dateKey];
-                                    return { dateKey, dateString: dateObj.toLocaleDateString("id-ID", { day: "numeric", month: "long" }), dataItem };
+                                    return { dateKey, dateObj, dateString: dateObj.toLocaleDateString("id-ID", { day: "numeric", month: "long" }), dataItem };
                                 });
 
                                 return (
-                                    <div key={weekNumber} className="border-b-4 border-default-200 last:border-b-0 hover:bg-white transition-colors">
-                                        {/* Tanggal */}
-                                        <div className="grid grid-cols-8 border-b border-default-200">
-                                            <div className="p-1 px-2 text-xs font-semibold text-default-600 border-r border-default-200 flex items-center">Tanggal</div>
-                                            {daysInWeek.map((day, i) => (
-                                                <div key={i} className={`p-1 px-2 text-xs font-medium text-center text-default-800 ${i !== 6 ? "border-r" : ""} border-default-200`}>
-                                                    {day.dateString}
-                                                </div>
-                                            ))}
-                                        </div>
-
-                                        {/* PIC */}
-                                        <div className="grid grid-cols-8 border-b border-default-100">
-                                            <div className="p-2 px-3 text-[11px] font-bold text-default-500 border-r border-default-200 flex items-center uppercase tracking-wider bg-white">PIC</div>
-                                            {daysInWeek.map((day, i) => {
-                                                const locked = isPlanLocked(day.dataItem);
-                                                return (
-                                                    <div
-                                                        key={i}
-                                                        onClick={() => handlePlannerClick(day.dateKey, day.dateString, day.dataItem)}
-                                                        className={`p-1.5 ${i !== 6 ? "border-r" : ""} border-default-200 relative group transition-colors
-                                                            ${isManager ? "cursor-pointer hover:bg-default-100" : "cursor-default"}`}
-                                                    >
-                                                        <div className={`text-[10px] font-bold px-2 py-1 rounded w-full text-center truncate shadow-sm transition-all ${getPicColor(day.dataItem?.pic || "-")}`}>
-                                                            {day.dataItem?.pic || "-"}
-                                                        </div>
-                                                        {locked && <Lock className="absolute top-1 right-1 w-2.5 h-2.5 text-default-400" />}
-                                                    </div>
-                                                );
-                                            })}
-                                        </div>
-
-                                        {/* Pilar Konten */}
-                                        <div className="grid grid-cols-8 border-b border-default-100">
-                                            <div className="p-2 px-3 text-[11px] font-bold text-default-500 border-r border-default-200 flex items-center uppercase tracking-wider bg-white">Pilar Konten</div>
-                                            {daysInWeek.map((day, i) => (
+                                    <div key={weekNumber} className="grid grid-cols-7 border-b border-slate-100 last:border-b-0">
+                                        {daysInWeek.map((day, i) => {
+                                            const locked = isPlanLocked(day.dataItem);
+                                            const chip = day.dataItem ? getPlanStatusChip(day.dataItem.status) : null;
+                                            const isToday = new Date().toDateString() === day.dateObj.toDateString();
+                                            
+                                            return (
                                                 <div
                                                     key={i}
                                                     onClick={() => handlePlannerClick(day.dateKey, day.dateString, day.dataItem)}
-                                                    className={`p-1.5 ${i !== 6 ? "border-r" : ""} border-default-200 relative group transition-colors
-                                                        ${isManager ? "cursor-pointer hover:bg-default-100" : "cursor-default"}`}
+                                                    className={`min-h-[135px] p-3 border-r last:border-r-0 border-slate-100 bg-white transition-all flex flex-col justify-between group relative
+                                                        ${isManager ? "cursor-pointer hover:bg-slate-50/80" : "cursor-default"}
+                                                        ${isToday ? "bg-indigo-50/20 ring-1 ring-inset ring-indigo-500/20" : ""}`}
                                                 >
-                                                    <div className={`text-[10px] font-bold px-2 py-1 rounded w-full text-center truncate shadow-sm transition-all ${getPillarColor(day.dataItem?.pillar || "-")}`}>
-                                                        {day.dataItem?.pillar || "-"}
+                                                    {/* Date Header */}
+                                                    <div className="flex items-center justify-between mb-2">
+                                                        <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                                                            isToday 
+                                                                ? "bg-indigo-600 text-white shadow-sm" 
+                                                                : "text-slate-600 bg-slate-100"
+                                                        }`}>
+                                                            {day.dateObj.getDate()} {day.dateObj.toLocaleDateString("id-ID", { month: "short" })}
+                                                        </span>
+                                                        {locked && <Lock className="w-3.5 h-3.5 text-slate-400" />}
                                                     </div>
-                                                </div>
-                                            ))}
-                                        </div>
 
-                                        {/* Status Plan */}
-                                        <div className="grid grid-cols-8">
-                                            <div className="p-2 px-3 text-[11px] font-bold text-default-500 border-r border-default-200 flex items-center uppercase tracking-wider bg-white">Status</div>
-                                            {daysInWeek.map((day, i) => {
-                                                const chip = day.dataItem ? getPlanStatusChip(day.dataItem.status) : null;
-                                                return (
-                                                    <div key={i} className={`p-1.5 ${i !== 6 ? "border-r" : ""} border-default-200 flex flex-col items-center justify-center gap-1`}>
-                                                        {chip ? (
-                                                            <>
-                                                                <Chip size="sm" variant="flat" color={chip.color} className="text-[9px] font-bold h-5 px-1.5 min-h-[20px]">
-                                                                    {chip.label}
-                                                                </Chip>
-                                                                {isManager && day.dataItem?.content_id && (
-                                                                    <a 
-                                                                        href={`/konten-list?content_id=${day.dataItem.content_id}`} 
-                                                                        className="text-[9px] text-blue-600 hover:text-blue-800 hover:underline flex items-center gap-0.5 mt-0.5 transition-colors font-medium cursor-pointer"
-                                                                    >
-                                                                        <FileText className="w-2.5 h-2.5" /> Lihat Konten
-                                                                    </a>
-                                                                )}
-                                                            </>
-                                                        ) : (
-                                                            <span className="text-[10px] text-default-300">-</span>
-                                                        )}
-                                                    </div>
-                                                );
-                                            })}
-                                        </div>
+                                                    {/* Day Details */}
+                                                    {day.dataItem ? (
+                                                        <div className="flex flex-col gap-1.5 flex-1 justify-end py-1">
+                                                            {/* PIC */}
+                                                            <div className="flex items-center gap-1.5">
+                                                                <span className="text-[9px] text-slate-400 font-semibold uppercase tracking-wider">PIC:</span>
+                                                                <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded truncate max-w-full ${getPicColor(day.dataItem.pic)}`}>
+                                                                    {day.dataItem.pic}
+                                                                </span>
+                                                            </div>
+
+                                                            {/* Pilar */}
+                                                            <div className="flex items-center gap-1.5">
+                                                                <span className="text-[9px] text-slate-400 font-semibold uppercase tracking-wider">Pilar:</span>
+                                                                <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded truncate max-w-full ${getPillarColor(day.dataItem.pillar)}`}>
+                                                                    {day.dataItem.pillar}
+                                                                </span>
+                                                            </div>
+
+                                                            {/* Status */}
+                                                            {chip && (
+                                                                <div className="mt-1 flex items-center justify-between gap-1 border-t border-slate-100 pt-1.5">
+                                                                    <Chip size="sm" variant="flat" color={chip.color} className="text-[9px] font-bold h-5 px-1.5 min-h-[20px]">
+                                                                        {chip.label}
+                                                                    </Chip>
+                                                                    {isManager && day.dataItem.content_id && (
+                                                                        <a 
+                                                                            href={`/konten-list?content_id=${day.dataItem.content_id}`} 
+                                                                            className="text-[9px] text-indigo-600 hover:text-indigo-800 hover:underline flex items-center gap-0.5 transition-colors font-semibold"
+                                                                            onClick={(e) => e.stopPropagation()}
+                                                                        >
+                                                                            <FileText className="w-3 h-3" /> Detail
+                                                                        </a>
+                                                                    )}
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    ) : (
+                                                        <div className="flex-1 flex items-center justify-center py-2">
+                                                            <span className="text-[10px] text-slate-300 italic group-hover:text-slate-400 transition-colors font-medium">Kosong</span>
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            );
+                                        })}
                                     </div>
                                 );
                             })}
@@ -436,12 +423,12 @@ export default function DashboardPage() {
                         <ModalContent>
                             {() => (
                                 <>
-                                    <ModalHeader className="flex flex-col gap-1 border-b border-default-100 pb-4">
+                                    <ModalHeader className="flex flex-col gap-1 border-b border-slate-100 pb-4">
                                         <div className="flex items-center gap-2">
-                                            <CalendarCheck className="w-5 h-5 text-blue-600" />
-                                            <h2 className="text-xl font-bold">Edit Agenda Planner</h2>
+                                            <CalendarCheck className="w-5 h-5 text-indigo-600" />
+                                            <h2 className="text-lg font-bold text-slate-800">Edit Agenda Planner</h2>
                                         </div>
-                                        <p className="text-sm text-default-500 font-normal">Tanggal: {selectedDateDisplay}</p>
+                                        <p className="text-xs text-slate-500 font-normal">Tanggal: {selectedDateDisplay}</p>
                                     </ModalHeader>
                                     <ModalBody className="py-6 gap-5">
                                         <Input
@@ -451,6 +438,9 @@ export default function DashboardPage() {
                                             variant="bordered"
                                             value={editPic}
                                             onChange={(e) => setEditPic(e.target.value)}
+                                            classNames={{
+                                                inputWrapper: "bg-slate-50 border-slate-200 hover:border-slate-300 focus-within:!border-indigo-500 transition-colors"
+                                            }}
                                         />
                                         <Select
                                             label="Pilar Konten"
@@ -459,6 +449,9 @@ export default function DashboardPage() {
                                             variant="bordered"
                                             selectedKeys={editPillar && editPillar !== "-" ? [editPillar] : []}
                                             onChange={(e) => setEditPillar(e.target.value)}
+                                            classNames={{
+                                                trigger: "bg-slate-50 border-slate-200 hover:border-slate-300 focus-within:!border-indigo-500 transition-colors"
+                                            }}
                                         >
                                             <SelectItem key="Education" textValue="Education">Education</SelectItem>
                                             <SelectItem key="Relatable" textValue="Relatable">Relatable</SelectItem>
@@ -466,12 +459,13 @@ export default function DashboardPage() {
                                             <SelectItem key="PIC" textValue="PIC">PIC</SelectItem>
                                         </Select>
                                     </ModalBody>
-                                    <ModalFooter className="border-t border-default-100 pt-4">
+                                    <ModalFooter className="border-t border-slate-100 pt-4">
                                         <Button
                                             variant="flat"
                                             color="danger"
                                             onPress={() => { setEditPic(""); setEditPillar(""); setEditContentId(""); }}
                                             isDisabled={saving}
+                                            className="font-medium"
                                         >
                                             Kosongkan
                                         </Button>
@@ -479,7 +473,7 @@ export default function DashboardPage() {
                                             color="primary"
                                             onPress={handleSavePlanner}
                                             isLoading={saving}
-                                            className="bg-blue-600 font-medium px-6"
+                                            className="bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-6 shadow-sm"
                                         >
                                             Simpan Perubahan
                                         </Button>

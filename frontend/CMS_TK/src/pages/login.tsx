@@ -74,26 +74,24 @@ export default function LoginPage() {
     };
 
     return (
-        <div className="min-h-screen w-full bg-[#f4f4f5] flex items-center justify-center relative overflow-hidden font-sans">
-            {/* Background Decorations */}
-            <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-blue-500/20 blur-[120px] rounded-full pointer-events-none" />
-            <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-purple-500/20 blur-[120px] rounded-full pointer-events-none" />
-
-            <div className="w-full max-w-md px-4 relative z-10">
-                <div className="text-center mb-8 animate-fade-in-up">
-
-                    <h1 className="text-4xl font-extrabold text-default-900 tracking-tight mb-2">CMS Tim Kreatif</h1>
-                    <p className="text-default-500 font-medium">Masuk untuk mengelola agenda konten Anda.</p>
+        <div className="min-h-screen w-full bg-slate-50 flex items-center justify-center relative overflow-hidden font-sans">
+            <div className="w-full max-w-md px-6 relative z-10">
+                <div className="text-center mb-8">
+                    <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-indigo-600 text-white shadow-md mb-4">
+                        <span className="font-bold text-2xl leading-none">📖</span>
+                    </div>
+                    <h1 className="text-3xl font-bold text-slate-900 tracking-tight mb-2">CMS Tim Kreatif</h1>
+                    <p className="text-slate-500 text-sm font-medium">Masuk untuk mengelola agenda konten Anda.</p>
                 </div>
 
-                <Card shadow="lg" className="border border-white/40 bg-white/70 backdrop-blur-xl">
+                <Card shadow="sm" className="border border-slate-200 bg-white">
                     <CardHeader className="flex flex-col gap-1 items-start px-8 pt-8 pb-0">
-                        <h2 className="text-xl font-bold text-default-900">Selamat Datang Kembali</h2>
-                        <p className="text-sm text-default-500">Silakan masukkan detail akun SSO Anda</p>
+                        <h2 className="text-xl font-bold text-slate-900">Selamat Datang Kembali</h2>
+                        <p className="text-sm text-slate-500">Silakan masukkan detail akun SSO Anda</p>
                     </CardHeader>
                     <CardBody className="px-8 py-8">
                         {errorMsg && (
-                            <div className="mb-4 p-3 bg-danger-50 text-danger-600 text-sm rounded-lg border border-danger-200">
+                            <div className="mb-6 p-3 bg-red-50 text-red-600 text-sm rounded-lg border border-red-200">
                                 {errorMsg}
                             </div>
                         )}
@@ -105,13 +103,13 @@ export default function LoginPage() {
                                 placeholder="nama@perusahaan.com"
                                 type="email"
                                 variant="bordered"
-                                radius="lg"
+                                radius="md"
                                 size="lg"
-                                startContent={<Mail className="text-default-400 w-5 h-5 mr-1" />}
+                                startContent={<Mail className="text-slate-400 w-5 h-5 mr-1" />}
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 classNames={{
-                                    inputWrapper: "bg-white/50 border-default-200 hover:border-blue-500 transition-colors"
+                                    inputWrapper: "bg-slate-50 border-slate-200 hover:border-slate-300 focus-within:!border-indigo-500 transition-colors"
                                 }}
                             />
 
@@ -122,13 +120,13 @@ export default function LoginPage() {
                                     placeholder="Masukkan password Anda"
                                     type="password"
                                     variant="bordered"
-                                    radius="lg"
+                                    radius="md"
                                     size="lg"
-                                    startContent={<Lock className="text-default-400 w-5 h-5 mr-1" />}
+                                    startContent={<Lock className="text-slate-400 w-5 h-5 mr-1" />}
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
                                     classNames={{
-                                        inputWrapper: "bg-white/50 border-default-200 hover:border-blue-500 transition-colors"
+                                        inputWrapper: "bg-slate-50 border-slate-200 hover:border-slate-300 focus-within:!border-indigo-500 transition-colors"
                                     }}
                                 />
                             </div>
@@ -137,10 +135,10 @@ export default function LoginPage() {
                                 type="submit"
                                 color="primary"
                                 size="lg"
-                                radius="lg"
+                                radius="md"
                                 isLoading={isLoading}
                                 endContent={!isLoading && <ArrowRight className="w-4 h-4 ml-1" />}
-                                className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold text-base shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 transition-all hover:-translate-y-0.5"
+                                className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-base shadow-sm hover:shadow transition-all"
                             >
                                 {isLoading ? "Memverifikasi..." : "Masuk ke Dashboard"}
                             </Button>
@@ -148,7 +146,7 @@ export default function LoginPage() {
                     </CardBody>
                 </Card>
 
-                <p className="text-center text-sm text-default-400 mt-8">
+                <p className="text-center text-xs text-slate-400 mt-8">
                     &copy; 2026 CMS Tim Kreatif. All rights reserved.
                 </p>
             </div>
